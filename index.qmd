@@ -218,7 +218,17 @@ What's wrong with the `lateStatement` assignment and how would you fix it?
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-Adam's answers will be here.
+**Answer 1: Data Types and Date Handling**
+
+- The `actualShipDate` and `plannedShipDate` columns are both of type `datetime64[ns]`.
+
+- We can check the data type of a column using the `dtype` attribute.
+```{python}
+print(shipments_df['actualShipDate'].dtype)
+```
+
+- This is important because it allows us to compare the dates directly without converting them to strings.
+
 
 ### 2. Subset: Querying Rows and Filtering Columns
 
