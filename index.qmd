@@ -229,6 +229,47 @@ print(shipments_df['actualShipDate'].dtype)
 
 - This is important because it allows us to compare the dates directly without converting them to strings.
 
+**Answer 2: String vs Date Comparison **
+
+- Comparing as string python compares lexographically, so "04-11-2025" is less than "05-20-2024" because "04" is less than "05".
+
+```{python}
+# Example of problematic string comparison
+date1_str = "04-11-2025"  # April 11, 2025
+date2_str = "05-20-2024"  # May 20, 2024
+
+# String comparison (lexicographic)
+print(date1_str > date2_str)  # False (incorrect!)
+
+# Date comparison (chronological)
+date1_dt = pd.to_datetime("04-11-2025")
+date2_dt = pd.to_datetime("05-20-2024")
+print(date1_dt > date2_dt)  # True (correct!)
+```
+
+**Answer 3: Debug This Code**
+
+- The `lateStatement` assignment is wrong because it is referencing to 'is_late' column that is not yet defined because we are still in the process of assigning the `is_late` column.
+E.g. below code will throw an error because 'is_late' in unassigned yet.
+```python
+print(shipments_df['is_late'].dtype)
+print(shipments_df['lateStatement'].dtype)
+```
+
+- We can fix it with assignment chaining.
+```{python}
+shipments_with_lateness = (
+    shipments_df
+    .assign(
+        is_late=lambda df: df['actualShipDate'] > df['plannedShipDate'],
+        days_late=lambda df: (df['actualShipDate'] - df['plannedShipDate']).dt.days
+    )
+    .assign(
+        lateStatement=lambda df: df['is_late'].map({True: "Darn Shipment is Late", False: "Shipment is on Time"})
+    )
+)
+print(shipments_with_lateness['lateStatement'].head())
+```
 
 ### 2. Subset: Querying Rows and Filtering Columns
 
