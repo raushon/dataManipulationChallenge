@@ -218,7 +218,7 @@ What's wrong with the `lateStatement` assignment and how would you fix it?
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-**Answer 1: Data Types and Date Handling**
+>  Answer 1: Data Types and Date Handling
 
 - The `actualShipDate` and `plannedShipDate` columns are both of type `datetime64[ns]`.
 
@@ -229,7 +229,7 @@ print(shipments_df['actualShipDate'].dtype)
 
 - This is important because it allows us to compare the dates directly without converting them to strings.
 
-**Answer 2: String vs Date Comparison **
+> Answer 2: String vs Date Comparison 
 
 - Comparing as string python compares lexographically, so "04-11-2025" is less than "05-20-2024" because "04" is less than "05".
 
@@ -247,7 +247,7 @@ date2_dt = pd.to_datetime("05-20-2024")
 print(date1_dt > date2_dt)  # True (correct!)
 ```
 
-**Answer 3: Debug This Code**
+> Answer 3: Debug This Code
 
 - The `lateStatement` assignment is wrong because it is referencing to 'is_late' column that is not yet defined because we are still in the process of assigning the `is_late` column.
 E.g. below code will throw an error because 'is_late' in unassigned yet.
@@ -314,7 +314,33 @@ print(late_shipments.head())
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+> Answer 1: Query vs Boolean Indexing
+
+- The `.query()` method is more readable because it is a more natural way to query the data based on a condition.
+- Boolean indexing is faster for simpler queries but can become cumbersome with multiple conditions.
+- Boolean requires escaping quotes whereas Query handles it more naturally.
+
+> Answer 2: Additional Row Querying
+
+```{python}
+#| label: late-threshold-example
+#| echo: true
+
+# Define a threshold variable for late shipments
+late_threshold = 5
+
+# Query shipments that are at least late_threshold days late
+very_late_shipments = (
+    shipments_with_lateness
+    .query('days_late >= @late_threshold')  # Use @ to reference Python variables in query()
+    .filter(['shipID', 'partID', 'plannedShipDate', 'actualShipDate', 'days_late'])
+)
+
+print(f"Found {len(very_late_shipments)} shipments that are at least {late_threshold} days late")
+print(f"This represents {len(very_late_shipments)/len(shipments_with_lateness)*100:.1f}% of all shipments")
+print("\nVery late shipments sample:")
+print(very_late_shipments.head())
+```
 
 ### 3. Drop: Removing Unwanted Data
 
@@ -352,10 +378,19 @@ print("Remaining columns:", clean_shipments.columns.tolist())
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+> Answer 1: Drop vs Filter Strategies
+
+- The difference between `.drop(columns=['quantity'])` and `.filter()` is that `.drop(columns=['quantity'])` removes the column from the dataframe, whereas `.filter()` keeps the column in the dataframe.
+- You would choose to drop columns if you don't need them for your analysis, or if you need to save memory.
+- You would choose to filter columns if you need to keep a subset of the columns for your analysis.
+
+> Answer 2: Handling Missing Data
+
+- If you use `.dropna()` without specifying `subset`, it will drop all rows that have any missing values.
+- When you define the subset only the rows that has missing values in columns plannedShipDate or actualShipDate will be dropped.
+- You would want to be selective about which columns to check for missing values if you have a large number of columns. As most of the times not all columns are important for the analysis.
 
 ### 4. Sort: Arranging Data
-
 **Mental Model:** Order data by values or indices.
 
 Let's sort by lateness to see the worst offenders:
