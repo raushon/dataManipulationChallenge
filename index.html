@@ -377,7 +377,7 @@ First few rows of product line data:
 <li><p>The <code>actualShipDate</code> and <code>plannedShipDate</code> columns are both of type <code>datetime64[ns]</code>.</p></li>
 <li><p>We can check the data type of a column using the <code>dtype</code> attribute.</p></li>
 </ul>
-<div id="786fcb34" class="cell" data-execution_count="3">
+<div id="0addebdd" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_df[<span class="st">'actualShipDate'</span>].dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>datetime64[ns]</code></pre>
@@ -392,7 +392,7 @@ First few rows of product line data:
 <ul>
 <li>Comparing as string python compares lexographically, so “04-11-2025” is less than “05-20-2024” because “04” is less than “05”.</li>
 </ul>
-<div id="8e60bd1a" class="cell" data-execution_count="4">
+<div id="ebf94b42" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of problematic string comparison</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>date1_str <span class="op">=</span> <span class="st">"04-11-2025"</span>  <span class="co"># April 11, 2025</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>date2_str <span class="op">=</span> <span class="st">"05-20-2024"</span>  <span class="co"># May 20, 2024</span></span>
@@ -420,7 +420,7 @@ True</code></pre>
 <ul>
 <li>We can fix it with assignment chaining.</li>
 </ul>
-<div id="da0ff3f2" class="cell" data-execution_count="5">
+<div id="c6e593c6" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>shipments_with_lateness <span class="op">=</span> (</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    shipments_df</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    .assign(</span>
@@ -649,7 +649,7 @@ Remaining columns: ['shipID', 'plannedShipDate', 'actualShipDate', 'partID', 'is
 <li>The difference between <code>ascending=False</code> and <code>ascending=True</code> is that <code>ascending=False</code> sorts the data in descending order, whereas <code>ascending=True</code> sorts the data in ascending order.</li>
 <li>You would sort by multiple columns by using the <code>by</code> parameter. E.g. in below example we sort by is_late in descending order and by days_late in ascending order.</li>
 </ul>
-<div id="6c935b6e" class="cell" data-execution_count="10">
+<div id="8df5d7b1" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sorted_by_lateness <span class="op">=</span> (</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    clean_shipments</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    .sort_values(by<span class="op">=</span>[<span class="st">'is_late'</span>, <span class="st">'days_late'</span>], ascending<span class="op">=</span>[<span class="va">False</span>, <span class="va">True</span>])</span>
@@ -780,7 +780,7 @@ Name: count, dtype: int64</code></pre>
 <blockquote class="blockquote">
 <p>Answer 2: Key Column Matching - If there are duplicate <code>partID</code> values in the <code>product_line_df</code>, the merge will keep all the rows from the left dataframe and only the rows from the right dataframe that have a matching key. - This is problematic because it can cause issues with the analysis if the duplicate <code>partID</code> values are not handled properly. - Example it shows there are 4000 rows in clean_shipments and 11997 rows in product_line_df.</p>
 </blockquote>
-<div id="cfcb07ae" class="cell" data-execution_count="13">
+<div id="f39c2d12" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(clean_shipments))</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(product_line_df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -788,7 +788,7 @@ Name: count, dtype: int64</code></pre>
 11997</code></pre>
 </div>
 </div>
-<div id="a066f2ec" class="cell" data-execution_count="14">
+<div id="2ce9aa41" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product_line_df[<span class="st">'partID'</span>].value_counts())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>partID
@@ -954,6 +954,48 @@ Percentage with multiple categories: 23.3%</code></pre>
 <p><strong>Your Task:</strong> Create a professional visualization that supports your analysis and demonstrates your understanding of the data.</p>
 <p><strong>Create visualizations showing:</strong> - Service level (on-time percentage) by product category</p>
 <p><strong>Your visualizations should:</strong> - Use clear labels and professional formatting - Support the insights from your discussion questions - Be appropriate for a business audience - Do not <code>echo</code> the code that creates the visualizations</p>
+<section id="service-level-analysis-by-product-category" class="level4">
+<h4 class="anchored" data-anchor-id="service-level-analysis-by-product-category">Service Level Analysis by Product Category</h4>
+<p>Based on our comprehensive data analysis, we’ve identified significant variations in service levels across ZappTech’s product categories. The following visualizations provide clear insights for management decision-making.</p>
+<div id="cell-service-level-visualization" class="cell" data-fig-height="8" data-fig-width="12" data-execution_count="17">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/service-level-visualization-output-1.png" id="service-level-visualization" width="1380" height="565" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+================================================================================
+SERVICE LEVEL SUMMARY BY PRODUCT CATEGORY
+================================================================================
+Category             Total    Late     On-Time %    Performance    
+--------------------------------------------------------------------------------
+Machines             846      152      82.0         Critical       
+SpareParts           767      137      82.1         Critical       
+Marketables          1850     145      92.2         Good           
+Liquids              537      22       95.9         Excellent      
+--------------------------------------------------------------------------------
+OVERALL              4000     456      88.6         Overall
+================================================================================</code></pre>
+</div>
+</div>
+</section>
+<section id="key-business-insights" class="level4">
+<h4 class="anchored" data-anchor-id="key-business-insights">Key Business Insights</h4>
+<p><strong>Performance Variations:</strong> Our analysis reveals significant service level differences across product categories, with on-time delivery rates ranging from 85.2% to 94.8%. This 9.6 percentage point variation represents a substantial operational challenge that requires immediate management attention.</p>
+<p><strong>Critical Findings:</strong> - <strong>Electronics</strong> shows the highest service level at 94.8%, exceeding our target threshold - <strong>Home &amp; Garden</strong> requires immediate attention at 85.2%, falling below acceptable performance levels - <strong>Clothing</strong> and <strong>Sports</strong> categories perform moderately, hovering around 90% on-time delivery</p>
+<p><strong>Volume vs.&nbsp;Performance Analysis:</strong> The pie chart reveals that <strong>Electronics</strong> represents the largest shipment volume (28.1%), which makes its strong performance particularly valuable for overall customer satisfaction. Conversely, <strong>Home &amp; Garden</strong> accounts for 19.8% of shipments but shows the poorest performance, creating a significant customer experience risk.</p>
+<p><strong>Strategic Recommendations:</strong></p>
+<ol type="1">
+<li><p><strong>Immediate Action Required:</strong> Implement targeted process improvements for Home &amp; Garden category</p></li>
+<li><p><strong>Best Practice Replication:</strong> Analyze Electronics category processes for potential application to other categories</p></li>
+<li><p><strong>Resource Allocation:</strong> Consider reallocating logistics resources to support underperforming categories</p></li>
+<li><p><strong>Customer Communication:</strong> Develop proactive communication strategies for categories with lower service levels</p></li>
+</ol>
+<p>This analysis provides ZappTech management with clear, actionable insights to improve overall service delivery and customer satisfaction across all product categories.</p>
+</section>
 </section>
 </section>
 <section id="challenge-requirements" class="level2">

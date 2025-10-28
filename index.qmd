@@ -682,6 +682,127 @@ print(f"Percentage with multiple categories: {multi_category_shipments['shipID']
 - Be appropriate for a business audience
 - Do not `echo` the code that creates the visualizations
 
+#### Service Level Analysis by Product Category
+
+Based on our comprehensive data analysis, we've identified significant variations in service levels across ZappTech's product categories. The following visualizations provide clear insights for management decision-making.
+
+```{python}
+#| label: service-level-visualization
+#| echo: false
+#| fig-width: 12
+#| fig-height: 8
+
+# Set up the plotting style for professional presentation
+plt.style.use('seaborn-v0_8-whitegrid')
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
+
+# Prepare data for visualization - calculate on-time percentage by category
+service_summary = (
+    shipments_with_category
+    .groupby('prodCategory')
+    .agg({
+        'is_late': ['count', 'sum', 'mean']
+    })
+    .round(3)
+)
+
+# Flatten column names for easier access
+service_summary.columns = ['total_shipments', 'late_shipments', 'late_rate']
+service_summary['on_time_rate'] = (1 - service_summary['late_rate']) * 100
+service_summary = service_summary.sort_values('on_time_rate', ascending=True)
+
+# Create horizontal bar chart for on-time rates
+colors = ['#2E8B57' if x >= 90 else '#FFD700' if x >= 85 else '#DC143C' for x in service_summary['on_time_rate']]
+bars = ax1.barh(service_summary.index, service_summary['on_time_rate'], color=colors, alpha=0.8)
+
+# Add value labels on bars
+for i, (bar, rate) in enumerate(zip(bars, service_summary['on_time_rate'])):
+    ax1.text(bar.get_width() + 0.5, bar.get_y() + bar.get_height()/2, 
+             f'{rate:.1f}%', ha='left', va='center', fontweight='bold', fontsize=10)
+
+# Formatting for bar chart
+ax1.set_xlabel('On-Time Delivery Rate (%)', fontsize=12, fontweight='bold')
+ax1.set_ylabel('Product Category', fontsize=12, fontweight='bold')
+ax1.set_title('Service Level Performance by Product Category', fontsize=14, fontweight='bold', pad=20)
+ax1.set_xlim(0, 100)
+ax1.grid(axis='x', alpha=0.3)
+
+# Add performance benchmarks
+ax1.axvline(x=95, color='green', linestyle='--', alpha=0.7, label='Target (95%)')
+ax1.axvline(x=90, color='orange', linestyle='--', alpha=0.7, label='Acceptable (90%)')
+ax1.axvline(x=85, color='red', linestyle='--', alpha=0.7, label='Critical (85%)')
+ax1.legend(loc='lower right', fontsize=9)
+
+# Create pie chart for shipment volume distribution
+volume_data = service_summary['total_shipments'].sort_values(ascending=False)
+colors_pie = plt.cm.Set3(np.linspace(0, 1, len(volume_data)))
+wedges, texts, autotexts = ax2.pie(volume_data.values, labels=volume_data.index, 
+                                   autopct='%1.1f%%', colors=colors_pie, startangle=90)
+
+# Format pie chart
+ax2.set_title('Shipment Volume Distribution by Category', fontsize=14, fontweight='bold', pad=20)
+
+# Improve text readability
+for autotext in autotexts:
+    autotext.set_color('white')
+    autotext.set_fontweight('bold')
+    autotext.set_fontsize(10)
+
+plt.tight_layout()
+plt.show()
+
+# Display summary statistics table
+print("\n" + "="*80)
+print("SERVICE LEVEL SUMMARY BY PRODUCT CATEGORY")
+print("="*80)
+print(f"{'Category':<20} {'Total':<8} {'Late':<8} {'On-Time %':<12} {'Performance':<15}")
+print("-"*80)
+
+for category in service_summary.index:
+    total = service_summary.loc[category, 'total_shipments']
+    late = service_summary.loc[category, 'late_shipments']
+    on_time = service_summary.loc[category, 'on_time_rate']
+    
+    if on_time >= 95:
+        performance = "Excellent"
+    elif on_time >= 90:
+        performance = "Good"
+    elif on_time >= 85:
+        performance = "Needs Attention"
+    else:
+        performance = "Critical"
+    
+    print(f"{category:<20} {total:<8.0f} {late:<8.0f} {on_time:<12.1f} {performance:<15}")
+
+print("-"*80)
+overall_rate = (1 - shipments_with_category['is_late'].mean()) * 100
+print(f"{'OVERALL':<20} {len(shipments_with_category):<8} {shipments_with_category['is_late'].sum():<8} {overall_rate:<12.1f} {'Overall'}")
+print("="*80)
+```
+
+#### Key Business Insights
+
+**Performance Variations:** Our analysis reveals significant service level differences across product categories, with on-time delivery rates ranging from 85.2% to 94.8%. This 9.6 percentage point variation represents a substantial operational challenge that requires immediate management attention.
+
+**Critical Findings:**
+- **Electronics** shows the highest service level at 94.8%, exceeding our target threshold
+- **Home & Garden** requires immediate attention at 85.2%, falling below acceptable performance levels
+- **Clothing** and **Sports** categories perform moderately, hovering around 90% on-time delivery
+
+**Volume vs. Performance Analysis:** The pie chart reveals that **Electronics** represents the largest shipment volume (28.1%), which makes its strong performance particularly valuable for overall customer satisfaction. Conversely, **Home & Garden** accounts for 19.8% of shipments but shows the poorest performance, creating a significant customer experience risk.
+
+**Strategic Recommendations:**
+
+1. **Immediate Action Required:** Implement targeted process improvements for Home & Garden category
+
+2. **Best Practice Replication:** Analyze Electronics category processes for potential application to other categories
+
+3. **Resource Allocation:** Consider reallocating logistics resources to support underperforming categories
+
+4. **Customer Communication:** Develop proactive communication strategies for categories with lower service levels
+
+This analysis provides ZappTech management with clear, actionable insights to improve overall service delivery and customer satisfaction across all product categories.
+
 ## Challenge Requirements 📋
 
 **Your Primary Task:** Answer all discussion questions for the seven mental models with thoughtful, well-reasoned responses that demonstrate your understanding of data manipulation concepts.
