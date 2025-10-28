@@ -425,7 +425,26 @@ print(sorted_by_lateness[['shipID', 'partID', 'days_late', 'is_late']].head(10))
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+> Answer 1: Sorting Strategies
+
+- The difference between `ascending=False` and `ascending=True` is that `ascending=False` sorts the data in descending order, whereas `ascending=True` sorts the data in ascending order.
+- You would sort by multiple columns by using the `by` parameter. E.g. in below example we sort by is_late in descending order and by days_late in ascending order.
+
+
+```{python}
+sorted_by_lateness = (
+    clean_shipments
+    .sort_values(by=['is_late', 'days_late'], ascending=[False, True])
+)
+print(sorted_by_lateness.index)
+```
+
+> Answer 2: Index Management
+
+- The `.reset_index(drop=True)` after sorting is used to reset the index of the dataframe to be sequential.
+- The original index is not dropped because it is used to track the original order of the data.
+- This is problematic because it can cause issues with the analysis if the original index is not used.
+
 
 ### 5. Aggregate: Summarizing Data
 
@@ -465,7 +484,9 @@ print(f"\nOn-time delivery rate: {on_time_rate:.1f}%")
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+> Answer 1: Boolean Aggregation
+
+- `sum()` works on boolean values because it counts the number of True values.
 
 ### 6. Merge: Combining Information
 
@@ -504,7 +525,25 @@ print(shipments_with_category['prodCategory'].value_counts())
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+> Answer 1: Join Types and Data Loss
+
+- `how='left'` is used to keep all the rows from the left dataframe and only the rows from the right dataframe that have a matching key.
+- You can check if any shipments were lost during the merge by checking if the number of rows in the left dataframe is the same as the number of rows in the right dataframe.
+
+
+> Answer 2: Key Column Matching
+- If there are duplicate `partID` values in the `product_line_df`, the merge will keep all the rows from the left dataframe and only the rows from the right dataframe that have a matching key.
+- This is problematic because it can cause issues with the analysis if the duplicate `partID` values are not handled properly.
+- Example it shows there are 4000 rows in clean_shipments and 11997 rows in product_line_df. 
+```{python}
+print(len(clean_shipments))
+print(len(product_line_df))
+```
+
+
+```{python}
+print(product_line_df['partID'].value_counts())
+```
 
 ### 7. Split-Apply-Combine: Group Analysis
 
@@ -544,7 +583,18 @@ print(service_by_category)
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+> Answer 1: GroupBy Mechanics
+
+- `.groupby('prodCategory')` actually does is to group the data by the `prodCategory` column.
+- It "splits" the data into groups based on the `prodCategory` column. So we will have 5 groups, one for each product category.
+- We need to use `.agg()` after grouping to apply an aggregation function to the data.
+- If we don't use `.agg()`, the data will be returned as is, i.e. a list of dataframes for each group.
+
+> Answer 2: Multi-Level Grouping
+
+- Grouping by `['shipID', 'prodCategory']` is different from grouping by `'prodCategory'` alone because it groups the data by both the `shipID` and `prodCategory` columns.
+- This allows us to answer questions about the service level for each shipment and each product category.
+- Example if we want to know the service level for each shipment, we can group by `['shipID', 'prodCategory']` and then apply the aggregation function to the data.
 
 ## Answering A Business Question
 
@@ -588,7 +638,12 @@ print(f"Percentage with multiple categories: {multi_category_shipments['shipID']
 
 #### Briefly Give Answers to the Discussion Questions In This Section
 
-> Replace this with your answers to the discussion questions
+> Answer 1: Business Question Analysis
+
+- This comprehensive analysis answers the business question of how many shipments have multiple product categories. As mentioned in above answer, grouping by `['shipID', 'prodCategory']` differs from grouping by just `'prodCategory'` because it groups the data by both the `shipID` and `prodCategory` columns.
+
+- ZappTech's management can gain insights from knowing the percentage of multi-category shipments.
+- Example if we want to know the percentage of shipments that have multiple product categories, we can group by `['shipID', 'prodCategory']` and then apply the aggregation function to the data.
 
 ## Student Analysis Section: Mastering Data Manipulation {#student-analysis-section}
 
