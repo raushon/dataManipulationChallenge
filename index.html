@@ -377,7 +377,7 @@ First few rows of product line data:
 <li><p>The <code>actualShipDate</code> and <code>plannedShipDate</code> columns are both of type <code>datetime64[ns]</code>.</p></li>
 <li><p>We can check the data type of a column using the <code>dtype</code> attribute.</p></li>
 </ul>
-<div id="0addebdd" class="cell" data-execution_count="3">
+<div id="4e8d0919" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(shipments_df[<span class="st">'actualShipDate'</span>].dtype)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>datetime64[ns]</code></pre>
@@ -392,7 +392,7 @@ First few rows of product line data:
 <ul>
 <li>Comparing as string python compares lexographically, so “04-11-2025” is less than “05-20-2024” because “04” is less than “05”.</li>
 </ul>
-<div id="ebf94b42" class="cell" data-execution_count="4">
+<div id="76498f6e" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of problematic string comparison</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>date1_str <span class="op">=</span> <span class="st">"04-11-2025"</span>  <span class="co"># April 11, 2025</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>date2_str <span class="op">=</span> <span class="st">"05-20-2024"</span>  <span class="co"># May 20, 2024</span></span>
@@ -420,7 +420,7 @@ True</code></pre>
 <ul>
 <li>We can fix it with assignment chaining.</li>
 </ul>
-<div id="c6e593c6" class="cell" data-execution_count="5">
+<div id="5a85cd3d" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>shipments_with_lateness <span class="op">=</span> (</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    shipments_df</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    .assign(</span>
@@ -649,7 +649,7 @@ Remaining columns: ['shipID', 'plannedShipDate', 'actualShipDate', 'partID', 'is
 <li>The difference between <code>ascending=False</code> and <code>ascending=True</code> is that <code>ascending=False</code> sorts the data in descending order, whereas <code>ascending=True</code> sorts the data in ascending order.</li>
 <li>You would sort by multiple columns by using the <code>by</code> parameter. E.g. in below example we sort by is_late in descending order and by days_late in ascending order.</li>
 </ul>
-<div id="8df5d7b1" class="cell" data-execution_count="10">
+<div id="0b81fde5" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sorted_by_lateness <span class="op">=</span> (</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    clean_shipments</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    .sort_values(by<span class="op">=</span>[<span class="st">'is_late'</span>, <span class="st">'days_late'</span>], ascending<span class="op">=</span>[<span class="va">False</span>, <span class="va">True</span>])</span>
@@ -780,7 +780,7 @@ Name: count, dtype: int64</code></pre>
 <blockquote class="blockquote">
 <p>Answer 2: Key Column Matching - If there are duplicate <code>partID</code> values in the <code>product_line_df</code>, the merge will keep all the rows from the left dataframe and only the rows from the right dataframe that have a matching key. - This is problematic because it can cause issues with the analysis if the duplicate <code>partID</code> values are not handled properly. - Example it shows there are 4000 rows in clean_shipments and 11997 rows in product_line_df.</p>
 </blockquote>
-<div id="f39c2d12" class="cell" data-execution_count="13">
+<div id="e9cdd983" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(clean_shipments))</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">len</span>(product_line_df))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -788,7 +788,7 @@ Name: count, dtype: int64</code></pre>
 11997</code></pre>
 </div>
 </div>
-<div id="2ce9aa41" class="cell" data-execution_count="14">
+<div id="cf1f39c4" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(product_line_df[<span class="st">'partID'</span>].value_counts())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>partID
